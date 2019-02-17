@@ -1,0 +1,24 @@
+{
+  "name": "nas_explorer_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/server.js",
+  "scripts": {
+    "start": "node .",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigfoodK/nas_explorer_server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bigfoodK/nas_explorer_server/issues"
+  },
+  "homepage": "https://github.com/bigfoodK/nas_explorer_server#readme",
+  "dependencies": {
+    "typescript": "^3.3.3"
+  }
+}
