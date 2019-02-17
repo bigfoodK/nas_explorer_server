@@ -1,7 +1,8 @@
 import Koa from 'koa';
 import Router from 'koa-router';
+import { config } from './config';
 
-const serverPort = 3000;
+const serverPort = config.port;
 
 const app = new Koa();
 const router = new Router();
