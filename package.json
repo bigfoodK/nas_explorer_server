@@ -19,6 +19,11 @@
   },
   "homepage": "https://github.com/bigfoodK/nas_explorer_server#readme",
   "dependencies": {
+    "@types/koa": "^2.0.48",
+    "@types/koa-router": "^7.0.39",
+    "@types/node": "^11.9.4",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
     "typescript": "^3.3.3"
   }
 }
