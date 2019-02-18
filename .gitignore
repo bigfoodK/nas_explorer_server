@@ -88,3 +88,6 @@ typings/
 
 # Distribute
 /dist
+
+# Data for test
+testData/*
