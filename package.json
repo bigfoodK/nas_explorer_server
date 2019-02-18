@@ -5,7 +5,9 @@
   "main": "./dist/server.js",
   "scripts": {
     "start": "node .",
+    "start-watch": "nodemon .",
     "build": "tsc",
+    "build-watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,5 +27,8 @@
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
     "typescript": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }
