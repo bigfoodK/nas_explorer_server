@@ -13,7 +13,15 @@ type Range = {
 const rootDir = config.dataRoot;
 
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
-  const filePath = refinePath(ctx.params.path || '/');
+  const normalizedPath = path.normalize(ctx.params.path || '/');
+  const isUpperPath = normalizedPath.startsWith('../') || normalizedPath.startsWith('..\\') || normalizedPath === '..';
+
+  if(isUpperPath) {
+    ctx.status = 403;
+    return;
+  }
+
+  const filePath = path.join(rootDir, normalizedPath);
   const stat = await getFileStat(filePath);
 
   if(!stat) {
@@ -32,13 +40,6 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
   }
 
   sendFileRange(ctx, filePath, range);
-}
-
-function refinePath(_path: string) {
-  _path = path.normalize(_path);
-  _path = _path.replace(/(..\\)*/, '');
-  _path = path.join(rootDir, _path);
-  return _path;
 }
 
 async function getFileStat(path: string) {
