@@ -1,11 +1,11 @@
 export interface AppConfig {
   port: number;
-  dataRood: string;
+  dataRoot: string;
 }
 
 const config: AppConfig = {
   port: 3000,
-  dataRood: __dirname + './../testData',
+  dataRoot: __dirname + './../testData',
 };
 
 export { config };

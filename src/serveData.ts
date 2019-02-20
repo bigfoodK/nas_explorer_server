@@ -10,7 +10,7 @@ type Range = {
   totalLength: number;
 }
 
-const rootDir = config.dataRood;
+const rootDir = config.dataRoot;
 
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
   const filePath = refinePath(ctx.params.path || '/');
