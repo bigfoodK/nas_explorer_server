@@ -17,6 +17,7 @@ const rootDir = config.dataRoot;
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
   const normalizedPath = path.posix.normalize(ctx.params.path || '/');
   const isUpperPath = normalizedPath.startsWith('../') || normalizedPath.startsWith('..\\') || normalizedPath === '..';
+  console.log(normalizedPath);
 
   if(isUpperPath) {
     ctx.status = 403;
@@ -37,7 +38,7 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
 
   directoryEntries.forEach(fileName => {
     const filePath = path.join(directoryPath, fileName);
-    const urlFilePath = path.posix.join(normalizedPath, fileName);
+    const urlFilePath = path.posix.join('/', normalizedPath, fileName);
     
     promisesMakingFileIndex.push(
       fs.promises.stat(filePath)
@@ -83,6 +84,8 @@ async function getDirectoryStat(path: string) {
 
 function sendIndex(ctx: Koa.Context, fileIndexes: FileIndex[]) {
   ctx.set('Content-Type', 'application/json');
+  // CROS for debug client, If you found it remove it
+  ctx.set('Access-Control-Allow-Origin', 'http://localhost:3001');
   ctx.body = fileIndexes;
 }
 
