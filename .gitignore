@@ -91,3 +91,6 @@ typings/
 
 # Data for test
 testData/*
+
+# public directory
+public/*
