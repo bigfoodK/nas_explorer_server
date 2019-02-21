@@ -30,16 +30,17 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
   }
 
   const range = parseRange(ctx.headers.range, stat.size);
+  const isDownload = ctx.params.isDownload ? true : false;
 
   if(range === null) {
-    return sendFile(ctx, filePath, stat.size);
+    return sendFile(ctx, filePath, stat.size, isDownload);
   }
 
   if (range.start >= stat.size || range.end >= stat.size) {
     return endRequest(ctx, stat.size);
   }
 
-  sendFileRange(ctx, filePath, range);
+  sendFileRange(ctx, filePath, range, isDownload);
 }
 
 async function getFileStat(path: string) {
@@ -77,17 +78,22 @@ function parseRange(range: string, totalLength: number): Range | null {
   return result;
 }
 
-function sendFile(ctx: Koa.Context, filePath: string, size: number) {
-  const contentType = mime.getType(filePath) || 'application/octet-stream';
-
+function sendFile(ctx: Koa.Context, filePath: string, size: number, isDownload: boolean) {
+  const contentType = isDownload
+    ? 'application/octet-stream'
+    : mime.getType(filePath) || 'application/octet-stream';
+    
   ctx.set('Content-Type', contentType);
   ctx.set('Content-Length', `${size}`);
   ctx.set('Accept-Ranges', 'bytes');
   ctx.body = fs.createReadStream(filePath);
 }
 
-function sendFileRange(ctx: Koa.Context, filePath: string, range: Range) {
-  const contentType = mime.getType(filePath) || 'application/octet-stream';
+function sendFileRange(ctx: Koa.Context, filePath: string, range: Range, isDownload: boolean) {
+  const contentType = isDownload
+  ? 'application/octet-stream'
+  : mime.getType(filePath) || 'application/octet-stream';
+
   const fileStream = fs.createReadStream(filePath, { start: range.start, end: range.end });
 
   ctx.set('Content-Type', contentType);

@@ -10,6 +10,11 @@ router.get('/', async (ctx, next) => {
 
 router.get('/data/:path*', serveData);
 
+router.get('/download/:path*', async (ctx, next) => {
+  ctx.params.isDownload = true;
+  await serveData(ctx, next);
+});
+
 router.get('/index/:path*', serveIndexes);
 
 export { router };
