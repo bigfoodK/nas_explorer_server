@@ -8,8 +8,8 @@ type FileIndex = {
   name: string;
   path: string;
   size: number;
-  createdAtMs: Date;
-  modifiedAtMs: Date;
+  createdAtMs: number;
+  modifiedAtMs: number;
 }
 
 const rootDir = config.dataRoot;
@@ -52,8 +52,8 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
           name: fileName,
           path: urlFilePath,
           size: fileStats.size,
-          createdAtMs: fileStats.birthtime,
-          modifiedAtMs: fileStats.mtime,
+          createdAtMs: fileStats.birthtimeMs,
+          modifiedAtMs: fileStats.mtimeMs,
         });
       })
     );
