@@ -6,7 +6,7 @@ import servePublic from './servePublic';
 const router = new Router();
 
 router.get('/', async (ctx, next) => {
-  ctx.redirect('/explore');
+  ctx.redirect('/explore/browse');
 });
 
 router.get('/explore/:path*', async (ctx, next) => {
