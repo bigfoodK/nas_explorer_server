@@ -1,6 +1,7 @@
-import fs from 'fs';
+import Fs from 'fs';
 import Koa from 'koa';
-import path, { extname } from 'path';
+import Path from 'path';
+import { getFileStatAsync, setCORS } from './commonUtils';
 import { config } from './config';
 
 type FileIndex = {
@@ -15,33 +16,34 @@ type FileIndex = {
 const rootDir = config.dataRoot;
 
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
-  const normalizedPath = path.posix.normalize(ctx.params.path || '/');
+  const normalizedPath = Path.posix.normalize(ctx.params.path || '/');
   const isUpperPath = normalizedPath.startsWith('../') || normalizedPath.startsWith('..\\') || normalizedPath === '..';
-  console.log(normalizedPath);
+  
+  setCORS(ctx);
 
   if(isUpperPath) {
     ctx.status = 403;
     return;
   }
 
-  const directoryPath = path.join(rootDir, normalizedPath);
-  const stat = await getDirectoryStat(directoryPath);
+  const directoryPath = Path.join(rootDir, normalizedPath);
+  const stat = await getFileStatAsync(directoryPath);
 
-  if(!stat) {
+  if(!stat || stat.isFile()) {
     ctx.status = 404;
     return;
   }
 
-  const directoryEntries = await fs.promises.readdir(directoryPath);
+  const directoryEntries = await Fs.promises.readdir(directoryPath);
   const promisesMakingFileIndex: Promise<void>[] = [];
   const fileIndexes: FileIndex[] = [];
 
   directoryEntries.forEach(fileName => {
-    const filePath = path.join(directoryPath, fileName);
-    const urlFilePath = path.posix.join('/', normalizedPath, fileName);
+    const filePath = Path.join(directoryPath, fileName);
+    const urlFilePath = Path.posix.join('/', normalizedPath, fileName);
     
     promisesMakingFileIndex.push(
-      fs.promises.stat(filePath)
+      Fs.promises.stat(filePath)
       .then(fileStats => {
         const type = fileStats.isDirectory()
           ? 'directory' 
@@ -64,33 +66,13 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
   sendIndex(ctx, fileIndexes);
 }
 
-async function getDirectoryStat(path: string) {
-  try {
-    const stats = await fs.promises.stat(path);
-
-    if (!stats.isDirectory()) return false;
-    return stats;
-
-  } catch (e) {
-    switch (e.code) {
-      case 'ENOENT':
-        return false;
-    
-      default:
-        throw e;
-    }
-  }
-}
-
 function sendIndex(ctx: Koa.Context, fileIndexes: FileIndex[]) {
   ctx.set('Content-Type', 'application/json');
-  // CROS for debug client, If you found it remove it
-  ctx.set('Access-Control-Allow-Origin', 'http://localhost:3001');
   ctx.body = fileIndexes;
 }
 
 function identifyFileType(name: string) {
-  const extensionName = path.extname(name);
+  const extensionName = Path.extname(name);
 
   switch (extensionName) {
     case '.txt':

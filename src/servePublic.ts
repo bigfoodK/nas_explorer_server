@@ -1,13 +1,12 @@
-import fs from 'fs';
 import Koa from 'koa';
-import path from 'path';
-import mime from 'mime';
+import Path from 'path';
 import { config } from './config';
+import { getFileStatAsync, sendFile } from './commonUtils';
 
 const rootDir = config.publicRoot;
 
 export default async function servePublic(ctx: Koa.Context, next: () => Promise<any>) {
-  const normalizedPath = path.normalize(ctx.params.path || '/');
+  const normalizedPath = Path.normalize(ctx.params.path || '/');
   const isUpperPath = normalizedPath.startsWith('../') || normalizedPath.startsWith('..\\') || normalizedPath === '..';
 
   if(isUpperPath) {
@@ -15,39 +14,13 @@ export default async function servePublic(ctx: Koa.Context, next: () => Promise<
     return;
   }
 
-  const filePath = path.join(rootDir, normalizedPath);
-  const stat = await getFileStat(filePath);
+  const filePath = Path.join(rootDir, normalizedPath);
+  const stat = await getFileStatAsync(filePath);
 
-  if(!stat) {
+  if(!stat || stat.isDirectory()) {
     ctx.status = 404;
     return;
   }
 
-  sendFile(ctx, filePath, stat.size);
-}
-
-async function getFileStat(path: string) {
-  try {
-    const stats = await fs.promises.stat(path);
-
-    if (stats.isDirectory()) return false;
-    return stats;
-  } catch (e) {
-    switch (e.code) {
-      case 'ENOENT':
-        return false;
-    
-      default:
-        throw e;
-    }
-  }
-}
-
-function sendFile(ctx: Koa.Context, filePath: string, size: number) {
-  const contentType = mime.getType(filePath) || 'application/octet-stream';
-    
-  ctx.set('Content-Type', contentType);
-  ctx.set('Content-Length', `${size}`);
-  ctx.set('Accept-Ranges', 'bytes');
-  ctx.body = fs.createReadStream(filePath);
+  sendFile(ctx, filePath, stat.size, false);
 }
