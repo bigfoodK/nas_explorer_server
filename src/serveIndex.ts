@@ -77,16 +77,20 @@ function identifyFileType(name: string) {
   switch (extensionName) {
     case '.txt':
     case '.html':
+    case '.smi':
     return 'text';
 
     case '.jpg':
     case '.png':
+    case '.webp':
     return 'image';
 
     case '.mp3':
     return 'audio';
 
     case '.mp4':
+    case '.mkv':
+    case '.wepm':
     return 'video';
 
     default:
