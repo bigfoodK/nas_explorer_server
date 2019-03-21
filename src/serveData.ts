@@ -1,7 +1,7 @@
 import Fs from 'fs';
 import Koa from 'koa';
 import Path from 'path';
-import { config } from './config';
+import Config from './config';
 import { getFileStatAsync, sendFile, getMimeTypeFromExtname, setCORS } from './commonUtils';
 
 type Range = {
@@ -10,7 +10,7 @@ type Range = {
   totalLength: number;
 }
 
-const rootDir = config.dataRoot;
+const rootDir = Config.dataRoot;
 
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
   const normalizedPath = Path.normalize(ctx.params.path || '/');

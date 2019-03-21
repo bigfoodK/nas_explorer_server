@@ -1,9 +1,9 @@
 import Koa from 'koa';
-import { config } from './config';
+import Config from './config';
 import logger from './logger';
 import { router } from './router';
 
-const serverPort = config.port;
+const serverPort = Config.port;
 
 const app = new Koa();
 

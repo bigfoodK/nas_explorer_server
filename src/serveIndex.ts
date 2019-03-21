@@ -2,7 +2,7 @@ import Fs from 'fs';
 import Koa from 'koa';
 import Path from 'path';
 import { getFileStatAsync, setCORS } from './commonUtils';
-import { config } from './config';
+import Config from './config';
 
 type FileIndex = {
   type: ('directory' | 'text' | 'image' | 'audio' | 'video' | 'binary');
@@ -13,7 +13,7 @@ type FileIndex = {
   modifiedAtMs: number;
 }
 
-const rootDir = config.dataRoot;
+const rootDir = Config.dataRoot;
 
 export default async function serveData(ctx: Koa.Context, next: () => Promise<any>) {
   const normalizedPath = Path.posix.normalize(ctx.params.path || '/');

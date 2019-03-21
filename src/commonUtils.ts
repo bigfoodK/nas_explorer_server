@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import Fs from 'fs';
 import Mime from 'mime';
-import { config } from './config';
+import Config from './config';
 
 export async function getFileStatAsync(path: string) {
   try {
@@ -29,6 +29,6 @@ export function getMimeTypeFromExtname(filePath: string) {
 
 export function setCORS(ctx: Koa.Context) {
   const originName = ctx.request.header.origin;
-  if(config.corsAllows.indexOf(originName) === -1) return;
+  if(Config.corsAllows.indexOf(originName) === -1) return;
   ctx.set('Access-Control-Allow-Origin', originName);
 }

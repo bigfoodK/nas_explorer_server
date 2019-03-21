@@ -94,3 +94,6 @@ testData/*
 
 # public directory
 public/*
+
+# Config file
+config.json

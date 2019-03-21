@@ -1,9 +1,9 @@
 import Koa from 'koa';
 import Path from 'path';
-import { config } from './config';
+import Config from './config';
 import { getFileStatAsync, sendFile } from './commonUtils';
 
-const rootDir = config.publicRoot;
+const rootDir = Config.publicRoot;
 
 export default async function servePublic(ctx: Koa.Context, next: () => Promise<any>) {
   const normalizedPath = Path.normalize(ctx.params.path || '/');
