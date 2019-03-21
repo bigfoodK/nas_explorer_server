@@ -1,6 +1,9 @@
+import Os from 'os';
 import Fs from 'fs';
+import Path from 'path';
 
 interface ServerConfig {
+  debug: boolean,
   dataRoot: string;
   publicRoot: string
   corsAllows: string[];
@@ -12,16 +15,35 @@ interface ServerConfig {
     keyPath: string,
     certPath: string,
   },
+  greenlock: {
+    version: string,
+    server: string,
+    email: string,
+    agreeTos: boolean,
+    approveDomains: string[],
+    configDir: string,
+  },
 }
 
 const configPath = './config.json';
 
 const defaultConfig: ServerConfig = {
+  debug: false,
   dataRoot: '../testData',
   publicRoot: '../nas_explorer_client/build',
   corsAllows: [
 
   ],
+  greenlock: {
+    version: 'v02',
+    server: 'https://acme-v02.api.letsencrypt.org/directory',
+    email: 'hongGildong@example.com',
+    agreeTos: true,
+    approveDomains: [
+      'example.com',
+    ],
+    configDir: Path.join(Os.homedir(), '/acme/etc'),
+  },
   http: {
     port: 80,
   },
