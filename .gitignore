@@ -97,3 +97,6 @@ public/*
 
 # Config file
 config.json
+
+# ssl
+ssl/*

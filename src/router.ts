@@ -25,4 +25,4 @@ router.get('/index/:path*', serveIndexes);
 
 router.get('/:path*', servePublic);
 
-export { router };
+export = router;

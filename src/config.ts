@@ -1,21 +1,35 @@
 import Fs from 'fs';
 
 interface ServerConfig {
-  port: number;
   dataRoot: string;
   publicRoot: string
   corsAllows: string[];
+  http: {
+    port: number,
+  },
+  https: {
+    port: number,
+    keyPath: string,
+    certPath: string,
+  },
 }
 
 const configPath = './config.json';
 
 const defaultConfig: ServerConfig = {
-  port: 3000,
   dataRoot: '../testData',
   publicRoot: '../nas_explorer_client/build',
   corsAllows: [
 
   ],
+  http: {
+    port: 80,
+  },
+  https: {
+    port: 443,
+    keyPath: './ssl/key.pem',
+    certPath: './ssl/cert.pem',
+  },
 }
 
 function checkConfigFile(piece: any, defaultPiece: any) {
