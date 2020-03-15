@@ -3,15 +3,7 @@ import Koa from 'koa';
 import Path from 'path';
 import { getFileStatAsync, setCORS } from './commonUtils';
 import Config from './config';
-
-type FileIndex = {
-  type: ('directory' | 'text' | 'image' | 'audio' | 'video' | 'binary');
-  name: string;
-  path: string;
-  size: number;
-  createdAtMs: number;
-  modifiedAtMs: number;
-}
+import { FileType, FileIndex } from './commonInterfaces';
 
 const rootDir = Config.dataRoot;
 
@@ -46,7 +38,7 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
       Fs.promises.stat(filePath)
       .then(fileStats => {
         const type = fileStats.isDirectory()
-          ? 'directory' 
+          ? FileType.directory 
           : identifyFileType(fileName);
         
         fileIndexes.push({
@@ -78,22 +70,22 @@ function identifyFileType(name: string) {
     case '.txt':
     case '.html':
     case '.smi':
-    return 'text';
+    return FileType.text;
 
     case '.jpg':
     case '.png':
     case '.webp':
-    return 'image';
+    return FileType.image;
 
     case '.mp3':
-    return 'audio';
+    return FileType.audio;
 
     case '.mp4':
     case '.mkv':
     case '.wepm':
-    return 'video';
+    return FileType.video;
 
     default:
-    return 'binary';
+    return FileType.binary;
   }
 }
