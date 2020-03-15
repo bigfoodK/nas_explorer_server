@@ -1,9 +1,10 @@
 import Fs from 'fs';
 import Koa from 'koa';
 import Path from 'path';
-import { getFileStatAsync, setCORS } from './commonUtils';
+import { getFileStatAsync, setCORS, sendResponse } from './commonUtils';
 import Config from './config';
 import { FileType, FileIndex } from './commonInterfaces';
+import { ServeIndexResponseData, ServeIndexResponseMessage } from './responseTypes';
 
 const rootDir = Config.dataRoot;
 
@@ -14,7 +15,13 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
   setCORS(ctx);
 
   if(isUpperPath) {
-    ctx.status = 403;
+    sendResponse<ServeIndexResponseMessage, ServeIndexResponseData>(ctx, {
+      isSuccessful: false,
+      message: "Upper path not allowed",
+      data: {
+        fileIndexes: []
+      }
+    });
     return;
   }
 
@@ -22,7 +29,13 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
   const stat = await getFileStatAsync(directoryPath);
 
   if(!stat || stat.isFile()) {
-    ctx.status = 404;
+    sendResponse<ServeIndexResponseMessage, ServeIndexResponseData>(ctx, {
+      isSuccessful: false,
+      message: "No such dir exist",
+      data: {
+        fileIndexes: []
+      }
+    });
     return;
   }
 
@@ -55,12 +68,13 @@ export default async function serveData(ctx: Koa.Context, next: () => Promise<an
 
   await Promise.all(promisesMakingFileIndex);
 
-  sendIndex(ctx, fileIndexes);
-}
-
-function sendIndex(ctx: Koa.Context, fileIndexes: FileIndex[]) {
-  ctx.set('Content-Type', 'application/json');
-  ctx.body = fileIndexes;
+  sendResponse<ServeIndexResponseMessage, ServeIndexResponseData>(ctx, {
+    isSuccessful: true,
+    message: "Successfully fetched index",
+    data: {
+      fileIndexes
+    }
+  });
 }
 
 function identifyFileType(name: string) {

@@ -2,6 +2,7 @@ import Koa from 'koa';
 import Fs from 'fs';
 import Mime from 'mime';
 import Config from './config';
+import { JSONResponse } from './responseTypes';
 
 export async function getFileStatAsync(path: string) {
   try {
@@ -21,6 +22,11 @@ export function sendFile(ctx: Koa.Context, filePath: string, size: number, isDow
   ctx.set('Content-Type', contentType);
   ctx.set('Content-Length', `${size}`);
   ctx.body = Fs.createReadStream(filePath);
+}
+
+export function sendResponse<M, D>(ctx: Koa.Context, response: JSONResponse<M, D>) {
+  ctx.set('Content-Type', 'application/json');
+  ctx.body = JSON.stringify(response);
 }
 
 export function getMimeTypeFromExtname(filePath: string) {
