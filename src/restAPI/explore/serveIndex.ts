@@ -1,10 +1,10 @@
 import Fs from 'fs';
 import Koa from 'koa';
 import Path from 'path';
-import { getFileStatAsync, setCORS, sendResponse } from './commonUtils';
-import Config from './config';
-import { FileType, FileIndex } from './commonInterfaces';
-import { ServeIndexResponseData, ServeIndexResponseMessage } from './responseTypes';
+import { getFileStatAsync, setCORS, sendResponse } from '../../commonUtils';
+import Config from '../../config';
+import { FileType, FileIndex } from '../../commonInterfaces';
+import { ServeIndexResponseData, ServeIndexResponseMessage } from '../../responseTypes';
 
 const rootDir = Config.dataRoot;
 
