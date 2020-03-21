@@ -8,7 +8,8 @@
     "start-watch": "nodemon .",
     "build": "tsc",
     "build-watch": "tsc -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-plugin": "node scripts/install-plugin.js"
   },
   "repository": {
     "type": "git",

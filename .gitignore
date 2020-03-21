@@ -100,3 +100,6 @@ config.json
 
 # ssl
 ssl/*
+
+# plugin
+src/plugins/*
