@@ -5,7 +5,8 @@ import Path from 'path';
 interface ServerConfig {
   debug: boolean,
   dataRoot: string;
-  publicRoot: string
+  publicRoot: string;
+  levelDb: string;
   corsAllows: string[];
   http: {
     port: number,
@@ -31,6 +32,7 @@ const defaultConfig: ServerConfig = {
   debug: false,
   dataRoot: '../testData',
   publicRoot: '../nas_explorer_client/build',
+  levelDb: Path.join(__dirname, '../level.db'),
   corsAllows: [
 
   ],

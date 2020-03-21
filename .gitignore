@@ -103,3 +103,6 @@ ssl/*
 
 # plugin
 src/plugins/*
+
+# db
+level.db/
