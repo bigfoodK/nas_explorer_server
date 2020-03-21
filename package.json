@@ -23,11 +23,13 @@
   "homepage": "https://github.com/bigfoodK/nas_explorer_server#readme",
   "dependencies": {
     "@types/koa": "^2.0.48",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.0.39",
     "@types/node": "^11.9.4",
     "greenlock-express": "^2.6.8",
     "greenlock-koa": "^2.1.4",
     "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "mime": "^2.4.0",
     "typescript": "^3.3.3"

@@ -2,7 +2,8 @@ import Fs from 'fs';
 import Koa from 'koa';
 import Http from 'http';
 import Https from 'https';
-import Greenlock from 'greenlock-koa'
+import Greenlock from 'greenlock-koa';
+import KoaBodyParser from 'koa-bodyparser';
 import Config from './config';
 import logger from './logger';
 import router from './router';
@@ -13,6 +14,7 @@ const greenlock = Greenlock.create(Config.greenlock);
 const app = new Koa();
 app.use(logger);
 app.use(redirectToHttps);
+app.use(KoaBodyParser());
 app.use(router.routes());
 
 const httpServer = Config.debug
