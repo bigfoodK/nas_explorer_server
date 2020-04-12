@@ -8,13 +8,16 @@ import Config from './config';
 import logger from './logger';
 import router from './router';
 import redirectToHttps from './redirectToHttps';
+import { CustomState } from './commonInterfaces';
+import authenticate from './authenticate';
 
 const greenlock = Greenlock.create(Config.greenlock);
 
-const app = new Koa();
+const app = new Koa<CustomState>();
 app.use(logger);
 app.use(redirectToHttps);
 app.use(KoaBodyParser());
+app.use(authenticate);
 app.use(router.routes());
 
 const httpServer = Config.debug

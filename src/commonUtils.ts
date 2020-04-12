@@ -4,6 +4,8 @@ import Mime from 'mime';
 import Config from './config';
 import { JSONResponse } from './responseTypes';
 
+const alpabets = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+
 export async function getFileStatAsync(path: string) {
   try {
     const stats = await Fs.promises.stat(path);
@@ -37,4 +39,12 @@ export function setCORS(ctx: Koa.Context) {
   const originName = ctx.request.header.origin;
   if(Config.corsAllows.indexOf(originName) === -1) return;
   ctx.set('Access-Control-Allow-Origin', originName);
+}
+
+export function getRandomString(length: number) {
+  let result = '';
+  while (result.length < length) {
+    result += alpabets[Math.floor(Math.random() * alpabets.length)];
+  }
+  return result;
 }

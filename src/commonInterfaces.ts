@@ -1,3 +1,9 @@
+import { Account } from './user';
+
+export type CustomState = {
+  user?: Account;
+}
+
 export enum FileType {
   'directory',
   'text',

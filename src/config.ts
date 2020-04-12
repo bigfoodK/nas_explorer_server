@@ -1,6 +1,7 @@
 import Os from 'os';
 import Fs from 'fs';
 import Path from 'path';
+import { getRandomString } from './commonUtils';
 
 interface ServerConfig {
   debug: boolean,
@@ -8,6 +9,9 @@ interface ServerConfig {
   publicRoot: string;
   levelDb: string;
   corsAllows: string[];
+  user: {
+    jwtSecreatKey: string;
+  };
   http: {
     port: number,
   },
@@ -36,6 +40,9 @@ const defaultConfig: ServerConfig = {
   corsAllows: [
 
   ],
+  user: {
+    jwtSecreatKey: getRandomString(64),
+  },
   greenlock: {
     version: 'v02',
     server: 'https://acme-v02.api.letsencrypt.org/directory',
@@ -115,4 +122,6 @@ function getConfigFile(): ServerConfig {
   }
 }
 
-export = getConfigFile();
+const config = getConfigFile();
+
+export default config;
